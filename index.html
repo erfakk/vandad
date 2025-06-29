@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منوی رستوران ونداد</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts - Inter for a modern look, but since it's Persian, we'll rely on system fonts for better Persian rendering or a specific Persian font if available via CDN -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Vazirmatn', 'Iranian Sans', sans-serif; /* Fallback for Persian */
+            background-color: #f8f8f8; /* Light grey background */
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .header-bg {
+            background-color: #0056b3; /* Darker blue for header */
+            color: white;
+            padding: 2rem 0;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .section-heading {
+            color: #0056b3; /* Blue for headings */
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+        .card-content {
+            padding: 1rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .item-name {
+            font-weight: 600;
+            color: #0056b3;
+            margin-bottom: 0.5rem;
+            font-size: 1.125rem;
+        }
+        .item-description {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 0.75rem;
+            flex-grow: 1;
+        }
+        .item-price {
+            font-weight: 700;
+            color: #333;
+            font-size: 1.25rem;
+            text-align: left; /* Align price to left for RTL */
+        }
+        .add-to-cart-btn {
+            background-color: #007bff; /* Blue button */
+            color: white;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background-color 0.2s ease-in-out;
+            margin-top: 1rem;
+            width: 100%;
+        }
+        .add-to-cart-btn:hover {
+            background-color: #0056b3;
+        }
+        .cart-item {
+            background-color: #f0f8ff; /* Light blue for cart items */
+            border: 1px solid #cfe2ff;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .cart-item-info {
+            flex-grow: 1;
+        }
+        .cart-item-name {
+            font-weight: 600;
+            color: #0056b3;
+        }
+        .cart-item-price {
+            font-weight: 500;
+            color: #333;
+            font-size: 1rem;
+        }
+        .quantity-controls button {
+            background-color: #e0f2f7;
+            color: #0056b3;
+            border: 1px solid #a7d9ed;
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        .quantity-controls button:hover {
+            background-color: #cceeff;
+        }
+        .quantity-display {
+            margin: 0 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .remove-item-btn {
+            background-color: #dc3545; /* Red for remove button */
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            transition: background-color 0.2s;
+        }
+        .remove-item-btn:hover {
+            background-color: #c82333;
+        }
+        .checkout-btn {
+            background-color: #28a745; /* Green for checkout */
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+        .checkout-btn:hover {
+            background-color: #218838;
+        }
+        .order-confirmation {
+            background-color: #d4edda; /* Light green for confirmation */
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        .hidden {
+            display: none;
+        }
+        /* Subtle Iranian pattern - a simple border effect */
+        .iranian-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(to right, #0056b3, #007bff, #0056b3);
+            border-radius: 12px 12px 0 0;
+        }
+        .iranian-border {
+            position: relative;
+            padding-top: 10px; /* Space for the pseudo-element border */
+        }
+    </style>
+</head>
+<body class="font-inter">
+    <header class="header-bg text-center">
+        <div class="container">
+            <h1 class="text-5xl font-bold mb-2">رستوران ونداد</h1>
+            <p class="text-xl">طعم اصیل ایرانی در فضایی مدرن</p>
+            <div class="mt-4 text-2xl">
+                <i class="fas fa-utensils mx-2"></i>
+                <i class="fas fa-leaf mx-2"></i>
+                <i class="fas fa-mug-hot mx-2"></i>
+            </div>
+        </div>
+    </header>
+
+    <main class="container grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+        <!-- Menu Sections -->
+        <div class="lg:col-span-2">
+            <!-- Appetizers -->
+            <section id="appetizers" class="mb-12">
+                <h2 class="section-heading text-3xl mb-6 flex items-center">
+                    <i class="fas fa-bowl-food ml-3 text-2xl"></i> پیش‌غذاها
+                </h2>
+                <div id="appetizers-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Appetizer items will be rendered here by JS -->
+                </div>
+            </section>
+
+            <!-- Iranian Main Dishes -->
+            <section id="iranian-dishes" class="mb-12">
+                <h2 class="section-heading text-3xl mb-6 flex items-center">
+                    <i class="fas fa-rice-bowl ml-3 text-2xl"></i> غذاهای اصلی ایرانی
+                </h2>
+                <div id="iranian-dishes-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Iranian Main Dishes will be rendered here by JS -->
+                </div>
+            </section>
+
+            <!-- Fast Food -->
+            <section id="fast-food" class="mb-12">
+                <h2 class="section-heading text-3xl mb-6 flex items-center">
+                    <i class="fas fa-burger ml-3 text-2xl"></i> فست فود
+                </h2>
+                <div id="fast-food-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Fast Food items will be rendered here by JS -->
+                </div>
+            </section>
+
+            <!-- Beverages -->
+            <section id="beverages" class="mb-12">
+                <h2 class="section-heading text-3xl mb-6 flex items-center">
+                    <i class="fas fa-wine-glass ml-3 text-2xl"></i> نوشیدنی‌ها
+                </h2>
+                <div id="beverages-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Beverages will be rendered here by JS -->
+                </div>
+            </section>
+
+            <!-- Hookah -->
+            <section id="hookah" class="mb-12">
+                <h2 class="section-heading text-3xl mb-6 flex items-center">
+                    <i class="fas fa-smoking ml-3 text-2xl"></i> قلیان
+                </h2>
+                <div id="hookah-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Hookah items will be rendered here by JS -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Shopping Cart -->
+        <aside class="lg:col-span-1 sticky top-8 h-fit">
+            <div class="card p-6 iranian-border">
+                <h2 class="section-heading text-2xl mb-4 flex items-center">
+                    <i class="fas fa-shopping-cart ml-3 text-xl"></i> سبد خرید
+                </h2>
+                <div id="cart-items" class="mb-4">
+                    <!-- Cart items will be rendered here by JS -->
+                    <p id="empty-cart-message" class="text-gray-500 text-center">سبد خرید شما خالی است.</p>
+                </div>
+                <div class="flex justify-between items-center border-t pt-4 mt-4">
+                    <span class="text-xl font-bold text-blue-800">جمع کل:</span>
+                    <span id="cart-total" class="text-2xl font-bold text-blue-800">۰ تومان</span>
+                </div>
+                <button id="checkout-btn" class="checkout-btn mt-6" disabled>
+                    <i class="fas fa-cash-register ml-2"></i> ثبت سفارش
+                </button>
+                <div id="order-confirmation" class="order-confirmation hidden mt-4">
+                    <p class="font-bold text-lg mb-2">سفارش شما با موفقیت ثبت شد!</p>
+                    <p>به زودی با شما تماس خواهیم گرفت.</p>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <footer class="bg-gray-800 text-white text-center py-6 mt-12 rounded-t-2xl">
+        <p>&copy; 2025 رستوران ونداد. تمامی حقوق محفوظ است.</p>
+    </footer>
+
+    <script>
+        // Array of menu items
+        const menuItems = [
+            // Appetizers
+            { id: 'app1', name: 'کشک بادمجان', description: 'بادمجان کبابی با کشک، نعناع داغ و سیر', price: 85000, category: 'appetizer', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Kashk+Bademjan' },
+            { id: 'app2', name: 'میرزاقاسمی', description: 'بادمجان کبابی، گوجه، سیر و تخم مرغ', price: 90000, category: 'appetizer', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Mirza+Ghasemi' },
+            { id: 'app3', name: 'سالاد شیرازی', description: 'خیار، گوجه، پیاز و نعناع با آبلیمو', price: 60000, category: 'appetizer', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Shirazi+Salad' },
+            { id: 'app4', name: 'ماست و خیار', description: 'ماست، خیار، نعناع خشک و گل محمدی', price: 55000, category: 'appetizer', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Mast+o+Khiar' },
+            { id: 'app5', name: 'سوپ جو', description: 'سوپ جو با سبزیجات تازه و مرغ', price: 70000, category: 'appetizer', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Barley+Soup' },
+            { id: 'app6', name: 'نون و پنیر و سبزی', description: 'نان سنگک تازه با پنیر و سبزی خوردن', price: 75000, category: 'appetizer', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Bread+Cheese+Herb' },
+
+            // Iranian Main Dishes
+            { id: 'iran1', name: 'چلو کباب کوبیده', description: 'دو سیخ کباب کوبیده، برنج ایرانی، گوجه کبابی', price: 250000, category: 'iranian-dish', image: 'https://placehold.co/400x180/007bff/ffffff?text=Koobideh' },
+            { id: 'iran2', name: 'چلو کباب برگ', description: 'یک سیخ کباب برگ، برنج ایرانی، گوجه کبابی', price: 320000, category: 'iranian-dish', image: 'https://placehold.co/400x180/007bff/ffffff?text=Barg+Kebab' },
+            { id: 'iran3', name: 'چلو جوجه کباب', description: 'یک سیخ جوجه کباب، برنج ایرانی، گوجه کبابی', price: 280000, category: 'iranian-dish', image: 'https://placehold.co/400x180/007bff/ffffff?text=Joojeh+Kebab' },
+            { id: 'iran4', name: 'زرشک پلو با مرغ', description: 'مرغ سرخ شده با زرشک پلو و خلال بادام', price: 260000, category: 'iranian-dish', image: 'https://placehold.co/400x180/007bff/ffffff?text=Zereshk+Polo' },
+            { id: 'iran5', name: 'قیمه نثار', description: 'غذای سنتی قزوین با گوشت، خلال پسته و بادام', price: 290000, category: 'iranian-dish', image: 'https://placehold.co/400x180/007bff/ffffff?text=Gheymeh+Nesar' },
+            { id: 'iran6', name: 'قورمه سبزی', description: 'خورشت قورمه سبزی با گوشت گوسفندی و لوبیا', price: 240000, category: 'iranian-dish', image: 'https://placehold.co/400x180/007bff/ffffff?text=Ghormeh+Sabzi' },
+            { id: 'iran7', name: 'فسنجان', description: 'خورشت فسنجان با مرغ و گردو و رب انار', price: 310000, category: 'iranian-dish', image: 'https://placehold.co/400x180/007bff/ffffff?text=Fesenjan' },
+            { id: 'iran8', name: 'باقالی پلو با ماهیچه', description: 'باقالی پلو با شوید و ماهیچه گوسفندی', price: 350000, category: 'iranian-dish', image: 'https://placehold.co/400x180/007bff/ffffff?text=Baghali+Polo' },
+            { id: 'iran9', name: 'کباب ترش', description: 'کباب گوشت گوساله مزه دار شده با رب انار', price: 330000, category: 'iranian-dish', image: 'https://placehold.co/400x180/007bff/ffffff?text=Kabab+Torsh' },
+            { id: 'iran10', name: 'کوفته تبریزی', description: 'کوفته بزرگ با گوشت، برنج و سبزیجات معطر', price: 270000, category: 'iranian-dish', image: 'https://placehold.co/400x180/007bff/ffffff?text=Kofteh+Tabrizi' },
+            { id: 'iran11', name: 'ته‌چین مرغ', description: 'ته‌چین زعفرانی با مرغ و ماست', price: 265000, category: 'iranian-dish', image: 'https://placehold.co/400x180/007bff/ffffff?text=Tahchin' },
+            { id: 'iran12', name: 'عدس پلو با کشمش و خرما', description: 'عدس پلو با کشمش، خرما و گوشت چرخ کرده', price: 230000, category: 'iranian-dish', image: 'https://placehold.co/400x180/007bff/ffffff?text=Adas+Polo' },
+
+
+            // Fast Food
+            { id: 'ff1', name: 'برگر ونداد', description: 'همبرگر دست‌ساز، پنیر، کاهو، گوجه، سس مخصوص', price: 180000, category: 'fast-food', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Vandad+Burger' },
+            { id: 'ff2', name: 'پیتزا مخصوص ایرانی', description: 'پیتزا با گوشت چرخ کرده، فلفل دلمه، قارچ و پنیر', price: 220000, category: 'fast-food', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Iranian+Pizza' },
+            { id: 'ff3', name: 'ساندویچ کباب لقمه', description: 'کباب لقمه، گوجه، خیارشور و جعفری در نان باگت', price: 190000, category: 'fast-food', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Loghmeh+Sandwich' },
+            { id: 'ff4', name: 'سیب زمینی سرخ کرده', description: 'سیب زمینی سرخ کرده با سس کچاپ', price: 70000, category: 'fast-food', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Fries' },
+            { id: 'ff5', name: 'چیز برگر', description: 'همبرگر، پنیر چدار، کاهو، گوجه، پیاز', price: 195000, category: 'fast-food', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Cheeseburger' },
+            { id: 'ff6', name: 'پیتزا پپرونی', description: 'پیتزا با سس مخصوص، پپرونی و پنیر موزارلا', price: 210000, category: 'fast-food', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Pepperoni+Pizza' },
+            { id: 'ff7', name: 'ساندویچ مرغ گریل', description: 'فیله مرغ گریل شده، کاهو، گوجه و سس سیر', price: 175000, category: 'fast-food', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Grilled+Chicken' },
+            { id: 'ff8', name: 'پیتزا سبزیجات', description: 'پیتزا با قارچ، فلفل دلمه، زیتون، پیاز و ذرت', price: 200000, category: 'fast-food', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Veggie+Pizza' },
+            { id: 'ff9', name: 'هات داگ', description: 'هات داگ با سس خردل و کچاپ و خیارشور', price: 150000, category: 'fast-food', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Hot+Dog' },
+            { id: 'ff10', name: 'سالاد سزار', description: 'کاهو، مرغ گریل، نان تست، پنیر پارمزان و سس سزار', price: 160000, category: 'fast-food', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Caesar+Salad' },
+
+            // Beverages
+            { id: 'bev1', name: 'دوغ محلی', description: 'دوغ سنتی ایرانی با نعناع خشک', price: 40000, category: 'beverage', image: 'https://placehold.co/400x180/007bff/ffffff?text=Dough' },
+            { id: 'bev2', name: 'شربت سکنجبین', description: 'شربت سنتی با خیار و نعناع', price: 45000, category: 'beverage', image: 'https://placehold.co/400x180/007bff/ffffff?text=Sekanjabin' },
+            { id: 'bev3', name: 'چای سیاه', description: 'چای سیاه ایرانی تازه دم', price: 30000, category: 'beverage', image: 'https://placehold.co/400x180/007bff/ffffff?text=Black+Tea' },
+            { id: 'bev4', name: 'قهوه اسپرسو', description: 'اسپرسو سینگل', price: 60000, category: 'beverage', image: 'https://placehold.co/400x180/007bff/ffffff?text=Espresso' },
+            { id: 'bev5', name: 'نوشابه', description: 'کوکا، فانتا، اسپرایت', price: 35000, category: 'beverage', image: 'https://placehold.co/400x180/007bff/ffffff?text=Soft+Drink' },
+            { id: 'bev6', name: 'آب معدنی', description: 'آب معدنی خنک', price: 20000, category: 'beverage', image: 'https://placehold.co/400x180/007bff/ffffff?text=Water' },
+            { id: 'bev7', name: 'آب پرتقال طبیعی', description: 'آب پرتقال تازه و طبیعی', price: 70000, category: 'beverage', image: 'https://placehold.co/400x180/007bff/ffffff?text=Orange+Juice' },
+            { id: 'bev8', name: 'شیر موز', description: 'شیر موز تازه و مقوی', price: 65000, category: 'beverage', image: 'https://placehold.co/400x180/007bff/ffffff?text=Banana+Milk' },
+
+            // Hookah
+            { id: 'hook1', name: 'قلیان دوسیب', description: 'طعم دوسیب شیرین و خنک', price: 120000, category: 'hookah', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Two+Apples' },
+            { id: 'hook2', name: 'قلیان نعناع', description: 'طعم نعناع تازه و خنک', price: 110000, category: 'hookah', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Mint' },
+            { id: 'hook3', name: 'قلیان پرتقال', description: 'طعم پرتقال شیرین و دلپذیر', price: 115000, category: 'hookah', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Orange' },
+            { id: 'hook4', name: 'قلیان لیمو', description: 'طعم لیمو ترش و تازه', price: 115000, category: 'hookah', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Lemon' },
+            { id: 'hook5', name: 'قلیان میکس میوه‌ای', description: 'ترکیبی از طعم‌های میوه‌ای', price: 130000, category: 'hookah', image: 'https://placehold.co/400x180/0056b3/ffffff?text=Fruit+Mix' },
+        ];
+
+        let cart = [];
+
+        const formatPrice = (price) => {
+            return price.toLocaleString('fa-IR') + ' تومان';
+        };
+
+        // Function to render menu items
+        const renderMenuItems = () => {
+            const appetizersContainer = document.getElementById('appetizers-container');
+            const iranianDishesContainer = document.getElementById('iranian-dishes-container');
+            const fastFoodContainer = document.getElementById('fast-food-container');
+            const beveragesContainer = document.getElementById('beverages-container');
+            const hookahContainer = document.getElementById('hookah-container');
+
+            appetizersContainer.innerHTML = '';
+            iranianDishesContainer.innerHTML = '';
+            fastFoodContainer.innerHTML = '';
+            beveragesContainer.innerHTML = '';
+            hookahContainer.innerHTML = '';
+
+            menuItems.forEach(item => {
+                const itemCard = document.createElement('div');
+                itemCard.className = 'card iranian-border'; // Added Iranian border class
+                itemCard.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" class="card-image" onerror="this.onerror=null;this.src='https://placehold.co/400x180/cccccc/333333?text=Image+Not+Found';">
+                    <div class="card-content">
+                        <h3 class="item-name">${item.name}</h3>
+                        <p class="item-description">${item.description}</p>
+                        <div class="flex justify-between items-center mt-auto">
+                            <span class="item-price">${formatPrice(item.price)}</span>
+                            <button class="add-to-cart-btn" data-item-id="${item.id}">
+                                <i class="fas fa-cart-plus ml-2"></i> افزودن به سبد
+                            </button>
+                        </div>
+                    </div>
+                `;
+                if (item.category === 'appetizer') {
+                    appetizersContainer.appendChild(itemCard);
+                } else if (item.category === 'iranian-dish') {
+                    iranianDishesContainer.appendChild(itemCard);
+                } else if (item.category === 'fast-food') {
+                    fastFoodContainer.appendChild(itemCard);
+                } else if (item.category === 'beverage') {
+                    beveragesContainer.appendChild(itemCard);
+                } else if (item.category === 'hookah') {
+                    hookahContainer.appendChild(itemCard);
+                }
+            });
+
+            // Add event listeners to "Add to Cart" buttons
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const itemId = event.currentTarget.dataset.itemId;
+                    const itemToAdd = menuItems.find(item => item.id === itemId);
+                    if (itemToAdd) {
+                        addToCart(itemToAdd);
+                    }
+                });
+            });
+        };
+
+        // Function to add item to cart
+        const addToCart = (item) => {
+            const existingItem = cart.find(cartItem => cartItem.id === item.id);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...item, quantity: 1 });
+            }
+            renderCart();
+        };
+
+        // Function to update item quantity in cart
+        const updateQuantity = (itemId, change) => {
+            const itemIndex = cart.findIndex(cartItem => cartItem.id === itemId);
+            if (itemIndex > -1) {
+                cart[itemIndex].quantity += change;
+                if (cart[itemIndex].quantity <= 0) {
+                    cart.splice(itemIndex, 1); // Remove if quantity is 0 or less
+                }
+            }
+            renderCart();
+        };
+
+        // Function to remove item from cart
+        co
