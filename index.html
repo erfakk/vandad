@@ -427,4 +427,102 @@
         };
 
         // Function to remove item from cart
-        co
+        const removeItem = (itemId) => {
+            cart = cart.filter(cartItem => cartItem.id !== itemId);
+            renderCart();
+        };
+
+        // Function to render shopping cart
+        const renderCart = () => {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartTotalElement = document.getElementById('cart-total');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            let total = 0;
+
+            cartItemsContainer.innerHTML = ''; // Clear previous cart items
+
+            if (cart.length === 0) {
+                emptyCartMessage.classList.remove('hidden');
+                checkoutBtn.disabled = true;
+            } else {
+                emptyCartMessage.classList.add('hidden');
+                checkoutBtn.disabled = false;
+                cart.forEach(item => {
+                    total += item.price * item.quantity;
+                    const cartItemDiv = document.createElement('div');
+                    cartItemDiv.className = 'cart-item';
+                    cartItemDiv.innerHTML = `
+                        <div class="cart-item-info">
+                            <p class="cart-item-name">${item.name}</p>
+                            <p class="cart-item-price">${formatPrice(item.price)}</p>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="quantity-controls flex items-center ml-4">
+                                <button class="decrease-quantity-btn" data-item-id="${item.id}">-</button>
+                                <span class="quantity-display mx-2">${item.quantity}</span>
+                                <button class="increase-quantity-btn" data-item-id="${item.id}">+</button>
+                            </div>
+                            <button class="remove-item-btn mr-2" data-item-id="${item.id}">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(cartItemDiv);
+                });
+            }
+
+            cartTotalElement.textContent = formatPrice(total);
+
+            // Add event listeners for quantity controls and remove buttons
+            document.querySelectorAll('.increase-quantity-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const itemId = event.currentTarget.dataset.itemId;
+                    updateQuantity(itemId, 1);
+                });
+            });
+
+            document.querySelectorAll('.decrease-quantity-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const itemId = event.currentTarget.dataset.itemId;
+                    updateQuantity(itemId, -1);
+                });
+            });
+
+            document.querySelectorAll('.remove-item-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const itemId = event.currentTarget.dataset.itemId;
+                    removeItem(itemId);
+                });
+            });
+        };
+
+        // Function for checkout process
+        const checkout = () => {
+            const orderConfirmation = document.getElementById('order-confirmation');
+            const checkoutBtn = document.getElementById('checkout-btn');
+
+            if (cart.length > 0) {
+                // Simulate order placement
+                console.log('Order placed:', cart);
+                orderConfirmation.classList.remove('hidden');
+                checkoutBtn.disabled = true; // Disable checkout after placing order
+                cart = []; // Clear cart after checkout
+                renderCart(); // Update cart display
+                setTimeout(() => {
+                    orderConfirmation.classList.add('hidden');
+                }, 5000); // Hide confirmation after 5 seconds
+            }
+        };
+
+        // Event listener for checkout button
+        document.getElementById('checkout-btn').addEventListener('click', checkout);
+
+        // Initial render on page load
+        window.onload = () => {
+            renderMenuItems();
+            renderCart();
+        };
+    </script>
+</body>
+</html>
